@@ -3,20 +3,24 @@ import matplotlib as mat
 import matplotlib.pyplot as plt
 import numpy as np
 from shell import *
-from interpolation import L_n, N_n
+from interpolation import L_n, N_n, l_n
 
 def draw_array( X, Y ):
   plt.plot( X, [ y for y in Y.values() ], 'ro-', label='y = f( x )' )
 
 def draw_inter( a, b, Xi, Yi, F_n ):
-  X = np.arange( a - 2, b + 2, 1e-3 )
+  X = None
+  try:
+    X = np.arange( a - 2, b + 2, 1e-2 )
+  except ValueError:
+    return
   y = []
   for x in X:
     try:
       y.append( F_n( Xi, Yi, x ) )
     except ValueError:
       y.append( 0 )
-  plt.plot( X, y, 'b-', label='y = F_n( x )' )
+  plt.plot( X, y, 'b-', label='y = N_n( x )' )
 
 sinx = { 'math': 'sin x', 'f': lambda x: sin( x ) }
 expx = { 'math': 'e^x', 'f': lambda x: exp( x ) }
@@ -40,26 +44,22 @@ def main():
       print( 'Осуществляем выход...' )
       exit()
 
-    methods = [ 'Многочленом Лагранжа', 'Многочленом Ньютона с конечными разностями' ]
-    method = std_read_item_from_items( 'Выберите метод интерполяции:', methods )
-    print( )
+    if len( X ) < 2:
+      print( 'Предоставлено меньше 2 узлов. Осуществляем выход...' )
+      exit()
+    # methods = [ 'Многочленом Лагранжа', 'Многочленом Ньютона с конечными разностями' ]
+    # method = std_read_item_from_items( 'Выберите метод интерполяции:', methods )
+    # print( )
 
     x0 = std_read_argument( -1 )
     y0 = 0
-    F_n = None
-
-    if method == 0:
-      y0 = L_n( X, Y, x0 )
-      F_n = L_n
-      print( f'L_n( { x0 } ) = { y0 }' )
-    elif method == 1:
-      y0 = N_n( X, Y, x0 )
-      F_n = N_n
-      print( f'N_n( { x0 } ) = { y0 }' )
-    else:
-      print( 'Осуществляем выход...' )
-      exit()
-
+    y0 = L_n( X, Y, x0 )
+    print( f'L_n( { x0 } ) = { y0 }' )
+    y0 = N_n( X, Y, x0 )
+    F_n = N_n
+    print( f'N_n( { x0 } ) = { y0 }' )
+    exit()
+    
     a = min( min( X ), x0 )
     b = max( max( X ), x0 )
     fa = min( min( Y.values() ), y0 )

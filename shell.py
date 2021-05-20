@@ -33,13 +33,13 @@ def std_read_ipair( i ):
 def std_read_interpolation_nodes_number():
   nodes_number = None
   while True:
-    nodes_number = input( "Введите число узлов интерполяции ( не менее 7 ): " )
+    nodes_number = input( "Введите число узлов интерполяции ( не менее 1 ): " )
     try:
       nodes_number = int( nodes_number )
-      if ( nodes_number >= 7 ):
+      if ( nodes_number >= 1 ):
         break
       else:
-        print( "Узлов интерполяции должно быть не менее 7. Попробуйте еще раз..." )
+        print( "Узлов интерполяции должно быть не менее 1. Попробуйте еще раз..." )
     except ( ValueError ):
       print( "Неверный формат данных. Попробуйте еще раз..." )
   return nodes_number
@@ -52,7 +52,10 @@ def extract_nodes():
   for node in range( nodes_number ):
     x, y = std_read_ipair( node )
     print( f'Считан узел: ( {x}, {y} )' )
-    X.append( x )
+    try:
+      X.index( x )
+    except ValueError:
+      X.append( x )
     Y[ x ] = y
 
   return ( X, Y )
@@ -74,6 +77,9 @@ def extract_arguments( fun ):
   for node in range( arguments_number ):
     x = std_read_argument( node )
     print( f'Получен узел: ( {x}, {fun( x )} )' )
-    X.append( x )
+    try:
+      X.index( x )
+    except ValueError:
+      X.append( x )
     Y[ x ] = fun( x )
   return ( X, Y )

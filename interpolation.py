@@ -37,8 +37,14 @@ def a_k( k, h, X, Y ):
 def N_n( X, Y, x ):
   h = X[ 1 ] - X[ 0 ]
   sum = a_k( 0, h, X, Y )
+  print( f'a_0 = {sum}' )
   product = 1
   for k in range( 1, len( X ) ):
+    coeff = ( x - X[ k - 1 ] )
     product = product * ( x - X[ k - 1 ] )
-    sum = sum + a_k( k, h, X, Y ) * product
+    print( f'product = {product}' )
+    print( f'( {x} - x_{k - 1}) = {x} - {X[ k - 1]} = {coeff}' )
+    ak = a_k( k, h, X, Y )
+    print( f'a_{k} = {ak}' )
+    sum = sum + ak * product
   return sum
